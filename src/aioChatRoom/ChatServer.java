@@ -42,29 +42,29 @@ public class ChatServer {
         this(DEFAULT_PORT);
     }
 
-    public void start(){
+    public void start() {
         try {
             //自定义ChannelGroup
             ExecutorService executorService = Executors.newFixedThreadPool(10);
             asynchronousChannelGroup = AsynchronousChannelGroup.withThreadPool(executorService);
 
             serverChannel = AsynchronousServerSocketChannel.open(asynchronousChannelGroup);
-            serverChannel.bind(new InetSocketAddress(LOCALHOST,port));
+            serverChannel.bind(new InetSocketAddress(LOCALHOST, port));
             System.out.println("服务器已经启动成功，随时等待客户端连接...");
 
-            while (true){
+            while (true) {
                 serverChannel.accept(null,new AcceptHandler());
 
                 System.in.read();
             }
         } catch (IOException e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             close(serverChannel);
         }
     }
 
-    private class AcceptHandler implements CompletionHandler<AsynchronousSocketChannel,Object> {
+    private class AcceptHandler implements CompletionHandler<AsynchronousSocketChannel, Object> {
         @Override
         public void completed(AsynchronousSocketChannel clientChannel, Object attachment) {
             if(serverChannel.isOpen())
@@ -102,7 +102,7 @@ public class ChatServer {
         public void completed(Integer result, ByteBuffer buffer) {
             if(buffer != null) {
                 //buffer不为空的时候，这里执行的是read之后的回调方法
-                if(result <= 0){
+                if(result <= 0) {
                     //客户端异常，将客户端从连接列表中移除
                     removeClient(this);
                 } else {
@@ -162,7 +162,7 @@ public class ChatServer {
                 //注意这个try，catch是自己加的
                 try {
                     //将消息存入缓存区中
-                    ByteBuffer buffer = charset.encode(getClientName(client) + fwdMsg);
+                    ByteBuffer buffer = charset.encode(getClientName(clientChannel) + fwdMsg);
                     //写给每个客户端
                     client.write(buffer, null, connectedHandler);
                 } catch (Exception e) {
