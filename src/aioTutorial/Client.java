@@ -40,8 +40,7 @@ public class Client {
             future.get();
 
             // 等待用户的输入
-            BufferedReader consoleReader =
-                    new BufferedReader(new InputStreamReader(System.in));
+            BufferedReader consoleReader = new BufferedReader(new InputStreamReader(System.in));
             while (true) {
                 String input = consoleReader.readLine();
 

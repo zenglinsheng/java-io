@@ -67,6 +67,8 @@ public class Server {
                 info.put("type", "read");
                 info.put("buffer", buffer);
 
+                // handler为客户端的异步处理器，监听客户端通道
+                // 客户端所发送的消息会写入到buffer中，handler会在接收到客户端的消息后进行业务处理（info信息会作为参数传递到handler）
                 clientChannel.read(buffer, info, handler);
             }
         }
@@ -77,9 +79,7 @@ public class Server {
         }
     }
 
-    private class ClientHandler implements
-            CompletionHandler<Integer, Object>
-    {
+    private class ClientHandler implements CompletionHandler<Integer, Object> {
         private AsynchronousSocketChannel clientChannel;
 
         public ClientHandler(AsynchronousSocketChannel channel) {
