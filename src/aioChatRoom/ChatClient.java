@@ -31,12 +31,12 @@ public class ChatClient {
         this(LOCALHOST,DEFAULT_PORT);
     }
 
-    public ChatClient(String host,int port){
+    public ChatClient(String host,int port) {
         this.host = host;
         this.port = port;
     }
 
-    public void start(){
+    public void start() {
         try {
             clientChannel = AsynchronousSocketChannel.open();
             Future<Void> connect = clientChannel.connect(new InetSocketAddress(host, port));
@@ -45,7 +45,7 @@ public class ChatClient {
             new Thread(new UserInputHandler(this)).start();
 
             ByteBuffer buffer = ByteBuffer.allocate(BUFFER);
-            while (clientChannel.isOpen()){
+            while (clientChannel.isOpen()) {
                 Future<Integer> read = clientChannel.read(buffer);
                 int result = read.get();
                 if(result <= 0) {
@@ -61,13 +61,13 @@ public class ChatClient {
             }
         } catch (IOException | InterruptedException | ExecutionException e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             close(clientChannel);
         }
     }
 
-    public void sendMsg(String msg){
-        if(msg.isEmpty()){
+    public void sendMsg(String msg) {
+        if(msg.isEmpty()) {
             return;
         } else {
             ByteBuffer buffer = charset.encode(msg);
@@ -80,7 +80,7 @@ public class ChatClient {
         }
     }
 
-    private void close(Closeable closeable){
+    private void close(Closeable closeable) {
         try {
             closeable.close();
         } catch (IOException e) {
@@ -88,7 +88,7 @@ public class ChatClient {
         }
     }
 
-    public boolean readyToQuit(String msg){
+    public boolean readyToQuit(String msg) {
         return QUIT.equals(msg);
     }
 

@@ -21,7 +21,7 @@ public class UserInputHandler implements Runnable {
     public void run() {
         BufferedReader consoleReader = new BufferedReader(new InputStreamReader(System.in));
 
-        while (true){
+        while (true) {
             try {
                 String msg = consoleReader.readLine();
                 client.sendMsg(msg);
